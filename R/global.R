@@ -1,0 +1,8 @@
+library(tidyverse)
+library(magrittr)
+library(tsibble)
+library(feasts)
+library(fable)
+library(plotly)
+library(lubridate)
+library(latex2exp)
