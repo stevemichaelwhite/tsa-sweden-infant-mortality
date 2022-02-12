@@ -1,18 +1,13 @@
-<style type="text/css">
-  p,ul,li{
-  font-size: 12pt;
-}
-</style>
-
 ## Overview
 
 This project applies classical time series analysis to Sweden infant
-mortality rates. The data set used comes from the one in [Bayesian
-Demographic Estimation and
+mortality rates. The data set under anlysis comes from the one in
+[Bayesian Demographic Estimation and
 Forecasting](https://www.taylorfrancis.com/chapters/mono/10.1201/9780429452987-11/infant-mortality-sweden-john-bryant-junni-zhang).
 
-The analysis framework is based on the one presented in: [Forecasting:
-Principles and Practice](https://otexts.com/fpp3/arima-r.html).
+This project’s analysis framework is based on the one presented in:
+[Forecasting: Principles and
+Practice](https://otexts.com/fpp3/arima-r.html).
 
 ## Analyse Raw Data
 
