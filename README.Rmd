@@ -1,0 +1,193 @@
+---
+title: "Exploratory Analysis - Stockholm Mortality Rate"
+author: "Steve White"
+date: "10/7/2021"
+output:
+  md_document:
+    variant: gfm
+always_allow_html: true
+---
+
+<style type="text/css">
+  p,ul,li{
+  font-size: 12pt;
+}
+</style>
+
+```{r setup, include=FALSE}
+library(htmltools)
+library(tidyverse)
+library(magrittr)
+library(plotly)
+library(tsibble)
+library(feasts)
+library(fable)
+
+library(lubridate)
+library(latex2exp)
+
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning = FALSE, results = "asis")
+res_plots <- readRDS("data/res_plots.rds")
+county_ts <- readRDS("data/county_ts.rds")
+
+```
+
+## Overview  
+
+This document answers exercise questions from lesson 4 as well as explores the TS analysis framework provided by:
+[https://otexts.com/fpp3/arima-r.html](https://otexts.com/fpp3/arima-r.html)
+
+
+[Code Available on GitLab](https://gitlabstats-prd/StatsMethods/time-series-network/learning/arima-modelling/lecture-4/-/tree/swhite)  
+
+## Analyse Raw Data {.tabset .tabset-pills}
+
+
+
+```{r}
+
+cat('\n') 
+cat("### Observed data  \n")
+htmltools::tagList(res_plots$stockholm_raw  )
+cat('\n') 
+
+# cat("### ACF  \n")
+# btc_daily %>% ACF(close) %>% autoplot()
+# cat('\n\n') 
+# cat("### First Difference  \n")
+# p <- btc_daily %>% autoplot(difference(close)) +
+#   labs(title="Daily Close Price - 1st Diff",
+#        y="USD") 
+# htmltools::tagList(ggplotly(p))
+# cat('\n\n') 
+# cat("### ACF - First Diff  \n")
+# btc_daily %>% ACF(difference(close)) %>% autoplot()
+# 
+# cat('\n\n')
+
+  
+```
+
+## {-}
+
+
+
+## Transformations {.tabset .tabset-pills}
+
+The data is visually assessed to see if transformation or differencing is required.  Additionally a KPSS test is performed in which the null hypothesis is that the data is stationary (small p-value -> differencing is requried).
+
+Logging the data appears to do little in altering the shape of the data.  Differencing appears to make the data more stationary.    Also KPSS p-value of the orignal series is reported as .01 which indicates to reject the null.  The KPSS p-value for the diffed series is reported as 0.1.  Therefore diffed data will be used for model selection. 
+
+### actual-data
+
+```{r, results = "hold"}
+
+# cat('\n') 
+# cat("### actual-data  \n")
+county_ts %>%  gg_tsdisplay(mort_rate, plot_type='partial', lag_max = 12)
+county_ts %>% features(mort_rate, unitroot_kpss)
+
+```
+
+### log-data 
+
+```{r, results = "hold"}
+
+# cat('\n\n') 
+# cat("### log-data  \n")
+county_ts %>%  gg_tsdisplay(log(mort_rate), plot_type='partial', lag_max = 12)
+county_ts %>% features(log(mort_rate), unitroot_kpss)
+```
+
+### diff-data 
+
+```{r, results = "hold"}
+
+# cat('\n\n') 
+# cat("### diff-data  \n")
+county_ts %>%  gg_tsdisplay(difference(mort_rate), plot_type='partial', lag_max = 12)
+county_ts %>% features(difference(mort_rate), unitroot_kpss)
+# cat('\n\n') 
+
+```
+
+### logdiff-data
+
+```{r, results = "hold"}
+# cat("### logdiff-data  \n")
+county_ts %>%  gg_tsdisplay(difference(log(mort_rate)), plot_type='partial', lag_max = 12)
+county_ts %>% features(difference(log(mort_rate)), unitroot_kpss)
+# cat('\n\n') 
+
+
+```
+
+## {-}
+
+
+
+## Model Selection {.tabset .tabset-pills}
+
+```{r, results = "hold"}
+county_model <- county_ts  %>% model(
+  arima011 = ARIMA(mort_rate ~ pdq(0,1,1)),
+  stepwise = ARIMA(mort_rate)
+  )
+```
+
+The ACF appears to be significant at lag 1 and then cut off.  The PACF appears to show geometric decay.  I will choose an MA(1) model for the diffed series or ARIMA(0,1,1) on the original (ie the airline model). The automatic model was performed using the stepwise [Hyndman-Khandakar algorithm](https://otexts.com/fpp3/arima-r.html).  The algorithm chose an ARIMA(2,1,0) Which I would have never chosen by looking at the ACF and PACF.
+
+
+Summary of manual model and automatic model:
+```{r, results = "hold"}
+glance(county_model)
+```
+
+
+### Manual
+
+```{r, results = "hold"}
+
+county_model %>% select(arima011) %>%report()
+county_model %>% select(arima011) %>% gg_tsresiduals()
+
+
+```
+
+
+
+### Auto  
+
+
+```{r, results = "hold"}
+
+county_model %>% select(stepwise) %>%report()
+county_model %>% select(stepwise) %>% gg_tsresiduals()
+
+
+```
+
+
+## {-}
+
+## Forecast {.tabset .tabset-pills}
+### Manual
+
+```{r, results = "hold"}
+county_model %>%
+  forecast(h=5)  %>% filter(.model=='arima011') %>%
+  autoplot(county_ts)
+```
+
+### Auto
+
+```{r, results = "hold"}
+county_model %>%
+  forecast(h=5)  %>% filter(.model=='stepwise') %>%
+  autoplot(county_ts)
+```
+
+## {-}
+
+
+
