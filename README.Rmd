@@ -34,11 +34,12 @@ county_ts <- readRDS("data/county_ts.rds")
 
 ## Overview  
 
-This document answers exercise questions from lesson 4 as well as explores the TS analysis framework provided by:
-[https://otexts.com/fpp3/arima-r.html](https://otexts.com/fpp3/arima-r.html)
+This project applies classical time series analysis to Sweden infant mortality rates.  The data set used comes from the one in [Bayesian Demographic Estimation and Forecasting](https://www.taylorfrancis.com/chapters/mono/10.1201/9780429452987-11/infant-mortality-sweden-john-bryant-junni-zhang).
+
+The analysis framework is based on the one presented in:
+[Forecasting: Principles and Practice](https://otexts.com/fpp3/arima-r.html).
 
 
-[Code Available on GitLab](https://gitlabstats-prd/StatsMethods/time-series-network/learning/arima-modelling/lecture-4/-/tree/swhite)  
 
 ## Analyse Raw Data {.tabset .tabset-pills}
 
@@ -48,7 +49,7 @@ This document answers exercise questions from lesson 4 as well as explores the T
 
 cat('\n') 
 cat("### Observed data  \n")
-htmltools::tagList(res_plots$stockholm_raw  )
+print(res_plots$stockholm_raw)
 cat('\n') 
 
 # cat("### ACF  \n")

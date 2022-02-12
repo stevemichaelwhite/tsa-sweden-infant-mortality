@@ -4,7 +4,7 @@ source("R/global.R")
 
 birth_death_ts <- readRDS("data/birth_death_ts.rds")
 county_ts <- birth_death_ts %>% filter(county == "Stockholm")
-
+res_plots <- readRDS("data/res_plots.rds")
 
 # Procedure from https://otexts.com/fpp3/arima-r.html
 
@@ -20,7 +20,7 @@ p <- county_ts %>% autoplot(mort_rate) +
   labs(title="Stockholm Annaual Infant Mortality",
        y="Mort rate") + geom_hline(yintercept = mort_mean)
 
-res_plots[["stockholm_raw"]] <- ggplotly(p)
+res_plots[["stockholm_raw"]] <- p
 
 
 
