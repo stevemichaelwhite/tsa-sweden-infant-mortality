@@ -81,7 +81,7 @@ Logging the data appears to do little in altering the shape of the data.  Differ
 * the orignal series:  .01 --> reject the null
 * the first-differenced series  0.1 --> fail to reject the null
 
-Therefore first-differenced data will be used for model selection.  
+Therefore, first-differenced data will be used for model selection.  
 
 ### actual-data
 

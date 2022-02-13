@@ -1,9 +1,19 @@
-county_ts <- readRDS("data/county_ts.rds")
+source("R/global.R")
+
+
+# Get Data ----------------------------------------------------------------
+
+birth_death_ts <- readRDS("data/birth_death_ts.rds")
+county_ts <- birth_death_ts %>% filter(county == "Stockholm")
+res_plots <- readRDS("data/res_plots.rds")
+
 
 county_model <- county_ts  %>% model(
   arima011 = ARIMA(mort_rate ~ pdq(0,1,1)),
-  stepwise = ARIMA(mort_rate)
+  stepwise = ARIMA(mort_rate),
+  search = ARIMA(mort_rate, stepwise = FALSE)
   )
+
 glance(county_model)
 
 county_model %>% select(arima011) %>%report()
