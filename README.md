@@ -1,15 +1,14 @@
 ## Overview
 
-This project applies classical time series analysis to Sweden infant
-mortality rates. The dataset under analysis comes from a problem
-presnted in [Bayesian Demographic Estimation and
-Forecasting](https://www.taylorfrancis.com/chapters/mono/10.1201/9780429452987-11/infant-mortality-sweden-john-bryant-junni-zhang).
-The data can be found in the `bdefdata` package located here:
-<https://github.com/johnrbryant/bdefdata/>. The package contains infant
-birth and death data for multiple counties in Sweden.
+This project applies classical time series analysis to infant mortality
+rates in the county of Stockholm, Sweden.
 
-Currently, analysis has only been performed on the largest county,
-Stockholm.
+The original problem is presented in [Bayesian Demographic Estimation
+and
+Forecasting](https://www.taylorfrancis.com/chapters/mono/10.1201/9780429452987-11/infant-mortality-sweden-john-bryant-junni-zhang).
+The original dataset contains infant birth and death data for the 21
+counties in Sweden and can be found in the `bdefdata` package located
+here: <https://github.com/johnrbryant/bdefdata/>.
 
 This project’s analysis framework is based on the one presented in:
 [Forecasting: Principles and
@@ -174,4 +173,5 @@ Next steps for this analysis:
 
 *Note: see
 [gp-sweden-infant-mortality](https://github.com/stevemichaelwhite/gp-sweden-infant-mortality)
-which models and forecasts the same dataset with a Gaussian Proccess.*
+which models and forecasts the same dataset with a gaussian proccess
+(GP).*
