@@ -20,8 +20,9 @@ p <- county_ts %>% autoplot(mort_rate) +
   labs(title="Stockholm Annaual Infant Mortality",
        y="Mort rate") + geom_hline(yintercept = mort_mean)
 
-res_plots[["stockholm_raw"]] <- p
-
+# Issues rendering plotly in README
+res_plots[["stockholm_raw_gg"]] <- p
+res_plots[["stockholm_raw"]] <- ggplotly(p)
 
 
 
